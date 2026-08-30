@@ -13,9 +13,7 @@
   ],
 
   "vars": {
-    // Used to build the shareable link returned after creating a postcard,
-    // e.g. "https://hihello.pages.dev/e/8Kf92Lm".
-    "SITE_URL": "https://your-frontend-domain.pages.dev",
+    "SITE_URL": "https://hihello.hi862.workers.dev",
     "SEND_DELAY_MS": "432000000",
     "MESSAGE_MAX_LENGTH": "2000",
     "MAX_PHOTOS_PER_POSTCARD": "2",
