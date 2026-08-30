@@ -23,6 +23,10 @@
   text-align: center;
 }
 
+.mail-state[hidden] {
+  display: none;
+}
+
 .mail-eyebrow {
   font-size: clamp(1.6rem, 4vw, 2.2rem);
   margin: 0;
