@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hi-hello — share your feelings & thoughts with anyone you love</title>
+  <meta name="description" content="hi-hello turns your words into a letter worth keeping. Write, tuck in a photo, and send it to anyone you love." />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="paper-bg" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="logo" href="#top" aria-label="hi-hello, back to top">hi-hello</a>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-content">
+        <h1 class="hero-heading" id="hero-heading">
+          Share your feelings <span class="amp">&amp;</span> thoughts with anyone you love
+        </h1>
+        <p class="hero-subtext">
+          <strong>hi-hello</strong> turns your words into a letter worth keeping —
+          write it, tuck in a photo, and send it in minutes.
+        </p>
+        <a class="cta-button" href="select.html" data-cta="write">
+          <span>Let's write</span>
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="envelope-scene">
+          <!-- Envelope back flap -->
+          <svg class="layer envelope-back" viewBox="0 0 500 525" preserveAspectRatio="none">
+            <path d="M250 0C303.116 0 500 228 500 228H0C0 228 196.884 0 250 0Z" fill="#FFFAFA" fill-opacity="0.3"/>
+            <path d="M0 225H500V525H0Z" fill="#FFFAFA" fill-opacity="0.3"/>
+          </svg>
+
+          <!-- Letter card -->
+          <div class="card">
+            <svg class="card-doodle" viewBox="0 0 300 400" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M1.14 76.94C1.14 76.94 159.03 -8.82 192.16 4.27C225.29 17.36 226.33 95.10 157.86 151.39C89.39 207.68 47.21 257.21 64.86 289.64C82.52 322.08 162.76 290.43 223.97 249.57C285.18 208.70 308.83 162.01 323.26 170.55C337.70 179.08 305.48 268.83 270.23 317.64C245.91 351.31 174.22 394.79 174.22 394.79" />
+            </svg>
+            <p class="card-text">
+              Hi, how are you doing? I miss you a lot and wanted to catch up.
+              I recently moved to Spain — I'll share some pictures with you.
+              It's been beautiful.
+            </p>
+          </div>
+
+          <!-- Photo -->
+          <figure class="photo">
+            <img src="assets/hero_photo.jpeg" alt="A lit tower rising against a dusk sky, sent along with the letter" loading="lazy" />
+          </figure>
+
+          <!-- Envelope pocket, front -->
+          <svg class="layer envelope-front" viewBox="0 0 500 525" preserveAspectRatio="none">
+            <path d="M0 225L88.581 267.076C95.556 270.389 100 277.3 100 285.021C100 337.57 100 525 100 525H0V225Z" fill="#FFFAFA" fill-opacity="0.5"/>
+            <path d="M500 225L411.419 267.076C404.444 270.389 400 277.3 400 285.021C400 337.57 400 525 400 525H500V225Z" fill="#FFFAFA" fill-opacity="0.5"/>
+            <path d="M37.035 319.454C38.751 309.929 47.041 303 56.718 303H443.282C452.959 303 461.249 309.929 462.965 319.454L500 525H0L37.035 319.454Z" fill="#FFFAFA" fill-opacity="0.5"/>
+          </svg>
+
+          <span class="envelope-stamp">hi-hello</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Next screen goes here as the flow grows -->
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

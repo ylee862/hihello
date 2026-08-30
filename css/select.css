@@ -1,0 +1,798 @@
+/* ==========================================================================
+   compose screen (choose postcard, write, address, send)
+   ========================================================================== */
+
+.compose-layout {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: clamp(0.5rem, 2vh, 1.25rem) var(--page-pad) clamp(1.5rem, 4vh, 2.5rem);
+  min-height: 0;
+  min-width: 0;
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+}
+
+.back-button[hidden] {
+  display: none;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  align-self: flex-start;
+  padding: 0.5rem 1rem 0.5rem 0.8rem;
+  border: 1.5px solid rgba(255, 250, 250, 0.55);
+  border-radius: 999px;
+  background: rgba(255, 250, 250, 0.08);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-white);
+  transition: background 200ms var(--ease-soft), border-color 200ms var(--ease-soft),
+    transform 200ms var(--ease-soft);
+}
+
+.back-button svg {
+  width: 1em;
+  height: 1em;
+  transition: transform 200ms var(--ease-soft);
+}
+
+.back-button:hover,
+.back-button:focus-visible {
+  background: rgba(255, 250, 250, 0.16);
+  border-color: rgba(255, 250, 250, 0.85);
+  transform: translateX(-2px);
+}
+
+.back-button:hover svg,
+.back-button:focus-visible svg {
+  transform: translateX(-2px);
+}
+
+/* ==========================================================================
+   Left column — envelope preview + send form
+   ========================================================================== */
+
+.compose-left {
+  --panel-w: min(88vw, clamp(14rem, 36vh, 24rem));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.25rem, 3vh, 2rem);
+  width: 100%;
+}
+
+.compose-left .envelope-scene {
+  width: var(--panel-w);
+  position: relative;
+  isolation: isolate;
+}
+
+.compose-left .card {
+  position: absolute;
+  z-index: 3;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: rotate(-6.07deg) translateY(10%);
+  animation: none;
+  transition: opacity 380ms var(--ease-soft), transform 380ms var(--ease-soft);
+}
+
+.compose-left .card.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+  transform: rotate(-6.07deg) translateY(0%);
+}
+
+.compose-left .card.is-active:hover,
+.compose-left .card.is-active:focus-visible {
+  transform: rotate(-6.07deg) translateY(-3%);
+}
+
+.compose-left .card:focus-visible {
+  outline: 2px solid var(--color-gold-soft);
+  outline-offset: 3px;
+}
+
+.card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: 110% 110%;
+  background-position: center;
+}
+
+.message-input {
+  position: relative;
+  left: 16%;
+  top: 20%;
+  width: 68%;
+  max-height: 68%;
+  min-height: 1.6em;
+  overflow-y: auto;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: clamp(0.6rem, 1.1vw, 0.85rem);
+  line-height: 1.5;
+  color: var(--color-ink);
+  pointer-events: none;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.message-input[data-empty='true']::before {
+  content: attr(data-placeholder);
+  color: var(--color-ink-soft);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.message-input.text-theme-light,
+.postcard-modal-message.text-theme-light {
+  color: var(--color-white);
+}
+
+.message-input.text-theme-light[data-empty='true']::before,
+.postcard-modal-message.text-theme-light[data-empty='true']::before {
+  color: rgba(255, 250, 250, 0.7);
+}
+
+.photo-slot {
+  position: absolute;
+  z-index: 3;
+  width: 42%;
+  aspect-ratio: 1 / 1.05;
+  background: #f5f5f5;
+  box-shadow: 0 12px 20px rgba(20, 16, 10, 0.26);
+  opacity: 0;
+  scale: 0.85;
+  transition: opacity 320ms var(--ease-soft), scale 320ms var(--ease-soft);
+  overflow: hidden;
+  border: none;
+  padding: 0;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.photo-slot:disabled {
+  pointer-events: none;
+}
+
+.photo-slot.is-filled:not(:disabled):hover,
+.photo-slot.is-filled:not(:disabled):focus-visible {
+  scale: 1.05;
+}
+
+.photo-slot:focus-visible {
+  outline: 2px solid var(--color-gold-soft);
+  outline-offset: 2px;
+}
+
+.photo-slot.is-filled {
+  opacity: 1;
+  scale: 1;
+}
+
+.photo-slot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 4% 4% 12%;
+  box-sizing: border-box;
+}
+
+.photo-slot[data-frame='plain'] {
+  background: transparent;
+}
+
+.photo-slot[data-frame='plain'] img {
+  padding: 0;
+}
+
+.photo-slot[data-frame='polaroid-black'] {
+  background: #211d1a;
+}
+
+.photo-slot[data-frame='polaroid-black'] img {
+  padding: 5% 5% 20%;
+}
+
+.photo-slot[data-frame='polaroid-white'] {
+  background: #f5f5f5;
+}
+
+.photo-slot[data-frame='polaroid-white'] img {
+  padding: 5% 5% 20%;
+}
+
+.photo-slot[data-frame='gallery-black'] {
+  background: #211d1a;
+}
+
+.photo-slot[data-frame='gallery-black'] img {
+  padding: 6%;
+}
+
+.photo-slot[data-frame='gallery-white'] img {
+  padding: 4%;
+}
+
+.photo-slot--one {
+  left: 48%;
+  top: 20%;
+  z-index: 6;
+  transform-origin: center;
+  rotate: -3deg;
+}
+
+.photo-slot--two {
+  left: 54%;
+  top: 40%;
+  z-index: 7;
+  transform-origin: center;
+  rotate: 4deg;
+}
+
+
+/* ==========================================================================
+   Send form
+   ========================================================================== */
+
+.send-form {
+  width: var(--panel-w);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  align-items: end;
+  column-gap: 0.75rem;
+}
+
+.field-row label {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 500;
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  color: var(--color-white);
+}
+
+.field-row input {
+  width: 100%;
+  background: rgba(255, 250, 250, 0.08);
+  border: none;
+  border-bottom: 1.5px solid rgba(255, 250, 250, 0.55);
+  padding: 0.5rem 0.6rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-white);
+  border-radius: 3px 3px 0 0;
+  transition: background 200ms var(--ease-soft), border-color 200ms var(--ease-soft);
+}
+
+.field-row input::placeholder {
+  color: rgba(255, 250, 250, 0.6);
+}
+
+.field-row input:focus-visible {
+  outline: none;
+  background: rgba(255, 250, 250, 0.14);
+  border-color: var(--color-gold-soft);
+}
+
+.field-row input:invalid:not(:placeholder-shown) {
+  border-color: #d97a6c;
+}
+
+.send-row {
+  margin-top: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.send-button {
+  background: rgba(255, 250, 250, 0.16);
+  border-color: rgba(255, 250, 250, 0.7);
+}
+
+.send-button .material-icons {
+  font-size: 18px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.send-button:hover,
+.send-button:focus-visible {
+  background: rgba(255, 250, 250, 0.26);
+}
+
+.send-note {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: #f0c9a0;
+  opacity: 0;
+  text-align: center;
+  transition: opacity 200ms var(--ease-soft);
+}
+
+.send-note.is-visible {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Right column — postcard + your-own-image pickers
+   ========================================================================== */
+
+.compose-right {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 4vh, 2.5rem);
+  min-width: 0;
+}
+
+.picker-section {
+  min-width: 0;
+}
+
+.picker-title {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 500;
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  color: var(--color-white);
+  margin: 0 0 0.9rem;
+}
+
+.picker-row {
+  display: flex;
+  gap: clamp(1.1rem, 2.4vw, 1.5rem);
+  overflow-x: auto;
+  padding: 0.75rem 0.25rem 1.25rem;
+  margin: -0.75rem -0.25rem -1.25rem;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 250, 250, 0.35) transparent;
+}
+
+.picker-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.picker-row::-webkit-scrollbar-thumb {
+  background: rgba(255, 250, 250, 0.35);
+  border-radius: 999px;
+}
+
+/* Postcard template cards */
+
+.postcard-card {
+  position: relative;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: clamp(6.5rem, 13vw, 8rem);
+  aspect-ratio: 3 / 4;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2.5px solid transparent;
+  background-size: 110% 110%;
+  background-position: center;
+  box-shadow: 0 8px 14px rgba(20, 16, 10, 0.24);
+  cursor: pointer;
+  transition: transform 240ms var(--ease-soft), border-color 200ms var(--ease-soft),
+    box-shadow 240ms var(--ease-soft);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 0;
+}
+
+.postcard-card:hover {
+  transform: translateY(-4px);
+}
+
+.postcard-card:focus-visible {
+  outline: 2px solid var(--color-gold-soft);
+  outline-offset: 3px;
+}
+
+.postcard-card[aria-checked='true'] {
+  border-color: var(--color-gold-soft);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 22px rgba(20, 16, 10, 0.3);
+}
+
+.postcard-card-check {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background: var(--color-gold-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 200ms var(--ease-soft), transform 200ms var(--ease-soft);
+}
+
+.postcard-card-check svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  stroke: var(--color-ink);
+}
+
+.postcard-card[aria-checked='true'] .postcard-card-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Frame-style picker for the user's own photos */
+
+.frame-slot {
+  position: relative;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: clamp(6rem, 12vw, 7.5rem);
+  aspect-ratio: 3 / 4;
+  display: block;
+  cursor: pointer;
+  transition: transform 220ms var(--ease-soft), box-shadow 240ms var(--ease-soft);
+  -webkit-tap-highlight-color: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 8px 14px rgba(20, 16, 10, 0.24);
+}
+
+.frame-slot:hover {
+  transform: translateY(-3px);
+}
+
+.frame-slot:focus-visible {
+  outline: 2px solid var(--color-gold-soft);
+  outline-offset: 3px;
+}
+
+.frame-slot .plus {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.frame-slot .plus svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  stroke: var(--color-ink);
+}
+
+.frame-slot .frame-inner {
+  position: absolute;
+  inset: 0;
+  background: #d7d7d7;
+}
+
+.frame-slot[data-frame='plain'] {
+  background: var(--color-bg-deep);
+  border-radius: 6px;
+}
+
+.frame-slot[data-frame='plain'] .frame-inner {
+  display: none;
+}
+
+.frame-slot[data-frame='polaroid-white'] {
+  background: #f5f5f5;
+  box-shadow: 0 10px 20px rgba(20, 16, 10, 0.22);
+}
+
+.frame-slot[data-frame='polaroid-white'] .frame-inner {
+  inset: 6% 6% 18%;
+}
+
+.frame-slot[data-frame='polaroid-black'] {
+  background: #211d1a;
+  box-shadow: 0 10px 20px rgba(20, 16, 10, 0.22);
+}
+
+.frame-slot[data-frame='polaroid-black'] .frame-inner {
+  inset: 6% 6% 18%;
+}
+
+.frame-slot[data-frame='gallery-black'] {
+  background: #211d1a;
+  box-shadow: 0 10px 20px rgba(20, 16, 10, 0.22);
+}
+
+.frame-slot[data-frame='gallery-black'] .frame-inner {
+  inset: 8%;
+}
+
+.frame-slot[data-frame='gallery-white'] {
+  background: #f5f5f5;
+  box-shadow: 0 10px 20px rgba(20, 16, 10, 0.22);
+}
+
+.frame-slot[data-frame='gallery-white'] .frame-inner {
+  inset: 6%;
+}
+
+.frame-slot.is-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.picker-hint {
+  margin-top: 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-white);
+  opacity: 0.75;
+}
+
+.picker-hint.is-limit {
+  color: #f0c9a0;
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Postcard editor modal
+   ========================================================================== */
+
+.postcard-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.25rem, 3vh, 2rem);
+  padding: 2rem 1.25rem;
+  background: rgba(20, 18, 15, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  overflow-y: auto;
+  opacity: 0;
+  animation: fade-in 260ms var(--ease-soft) forwards;
+}
+
+.postcard-modal-backdrop[hidden] {
+  display: none;
+}
+
+.postcard-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.25rem, 3vh, 1.75rem);
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+  animation: modal-in 320ms var(--ease-soft) forwards;
+  animation-delay: 60ms;
+}
+
+@keyframes modal-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.postcard-modal-card {
+  position: relative;
+  width: min(80vw, 22rem);
+  aspect-ratio: 3 / 4;
+  max-height: 62vh;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(10, 8, 6, 0.45);
+}
+
+.postcard-modal-bg {
+  position: absolute;
+  inset: 0;
+  background-size: 110% 110%;
+  background-position: center;
+}
+
+.postcard-modal-message-wrap {
+  position: absolute;
+  inset: 8% 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.postcard-modal-message {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--color-ink);
+  outline: none;
+  cursor: text;
+}
+
+.postcard-modal-message[data-empty='true']::before {
+  content: attr(data-placeholder);
+  color: var(--color-ink-soft);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.postcard-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.modal-done-btn {
+  position: static;
+  opacity: 1;
+  animation: none;
+}
+
+.warning-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1.1rem;
+  border: 1.5px solid #c9564a;
+  border-radius: 999px;
+  background: rgba(201, 86, 74, 0.12);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: #e8877c;
+  cursor: pointer;
+  transition: background 200ms var(--ease-soft), color 200ms var(--ease-soft),
+    transform 200ms var(--ease-soft);
+}
+
+.warning-button:hover,
+.warning-button:focus-visible {
+  background: rgba(201, 86, 74, 0.22);
+  color: #f3a99e;
+  transform: translateY(-1px);
+}
+
+.warning-button.is-solid {
+  background: #c9564a;
+  color: var(--color-white);
+}
+
+.warning-button.is-solid:hover,
+.warning-button.is-solid:focus-visible {
+  background: #b3483d;
+  color: var(--color-white);
+}
+
+.photo-viewer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.25rem, 3vh, 2rem);
+  padding: 2rem 1.25rem;
+  background: rgba(20, 18, 15, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  overflow-y: auto;
+  opacity: 0;
+  animation: fade-in 260ms var(--ease-soft) forwards;
+}
+
+.photo-viewer-backdrop[hidden] {
+  display: none;
+}
+
+.photo-viewer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.25rem, 3vh, 1.75rem);
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+  animation: modal-in 320ms var(--ease-soft) forwards;
+  animation-delay: 60ms;
+  max-width: min(90vw, 30rem);
+}
+
+.photo-viewer-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: min(80vw, 26rem);
+  max-height: 62vh;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(10, 8, 6, 0.45);
+}
+
+.photo-viewer-frame img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(80vw, 26rem);
+  max-height: 62vh;
+  object-fit: contain;
+}
+
+.photo-viewer-actions[hidden] {
+  display: none;
+}
+
+.photo-viewer-actions,
+.photo-viewer-confirm-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.photo-viewer-confirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  text-align: center;
+}
+
+.photo-viewer-confirm[hidden] {
+  display: none;
+}
+
+.photo-viewer-confirm p {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-white);
+}
+
+
+/* ==========================================================================
+   Breakpoints
+   ========================================================================== */
+
+
+@media (min-width: 64rem) {
+  .compose-layout {
+    grid-template-columns: minmax(20rem, 27rem) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .compose-left {
+    --panel-w: min(100%, clamp(16rem, 34vh, 25rem));
+  }
+}

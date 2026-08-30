@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hi-hello — it has been sent</title>
+  <meta name="description" content="Your postcard is on its way." />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/sent.css" />
+</head>
+<body>
+  <div class="paper-bg" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="logo" href="index.html" aria-label="hi-hello, back to home">hi-hello</a>
+  </header>
+
+  <main>
+    <section class="sent-layout" aria-labelledby="sent-heading">
+      <h1 class="sent-heading" id="sent-heading">
+        your envelope is sealed<br />
+        give this link to someone special
+      </h1>
+
+      <div class="sent-envelope" aria-hidden="true">
+        <svg class="layer sent-envelope-back" viewBox="0 0 500 300" preserveAspectRatio="none">
+          <path d="M0 0L88.581 42.076C95.556 45.389 100 52.3 100 60.021C100 112.57 100 300 100 300H0V0Z" fill="#FFFAFA" fill-opacity="0.5"/>
+          <path d="M500 0L411.419 42.076C404.444 45.389 400 52.3 400 60.021C400 112.57 400 300 400 300H500V0Z" fill="#FFFAFA" fill-opacity="0.5"/>
+          <path d="M37.035 94.454C38.751 84.929 47.041 78 56.718 78H443.282C452.959 78 461.249 84.929 462.965 94.454L500 300H0L37.035 94.454Z" fill="#FFFAFA" fill-opacity="0.5"/>
+        </svg>
+
+        <span class="sent-envelope-stamp">hi<br />hello</span>
+
+        <svg class="layer sent-envelope-flap" viewBox="0 0 500 300" preserveAspectRatio="none">
+          <path d="M250 228C303.116 228 500 0 500 0H0C0 0 196.884 228 250 228Z" fill="#FFFAFA" fill-opacity="0.8"/>
+        </svg>
+      </div>
+
+      <div class="share-link-box" id="share-link-box">
+        <p class="share-link-hint" id="share-link-hint">it'll open for them in 5 days</p>
+        <div class="share-link-row">
+          <input type="text" class="share-link-input" id="share-link-input" readonly aria-label="Your postcard link" />
+          <button type="button" class="copy-link-button" id="copy-link-button">
+            <span id="copy-link-label">Copy Link</span>
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="7" y="7" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M4.5 12.5V4.5C4.5 3.67157 5.17157 3 6 3H13.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <a class="cta-button" href="select.html">
+        <span>I want to send more</span>
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </section>
+  </main>
+
+  <script src="js/modules/sent.js"></script>
+</body>
+</html>

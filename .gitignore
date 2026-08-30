@@ -1,0 +1,14 @@
+# --- Cloudflare Workers backend (hihello-backend/) ---
+hihello-backend/node_modules/
+hihello-backend/.wrangler/
+hihello-backend/.dev.vars
+ 
+# --- General ---
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+ 
+# Editor/IDE noise
+.vscode/
+.idea/

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hi-hello — write your postcard</title>
+  <meta name="description" content="Pick a postcard, write your message, add a photo, and send it to someone you love." />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/select.css" />
+</head>
+<body>
+  <div class="paper-bg" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="logo" href="index.html" aria-label="hi-hello, back to home">hi-hello</a>
+  </header>
+
+  <main>
+    <section class="compose-layout" aria-label="Write your postcard">
+
+      <!-- LEFT: envelope preview + send form -->
+      <div class="compose-left">
+         <a class="back-button" href="index.html">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M16 10H4M4 10L9 5M4 10L9 15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>back</span>
+        </a>
+
+        <div class="envelope-scene" id="envelope-scene">
+          <svg class="layer envelope-back" viewBox="0 0 500 525" preserveAspectRatio="none">
+            <path d="M0 225H500V525H0Z" fill="#FFFAFA" fill-opacity="0.3"/>
+            <path d="M250 0C303.116 0 500 228 500 228H0C0 228 196.884 0 250 0Z" fill="#FFFAFA" fill-opacity="0.3"/>
+          </svg>
+
+          <div class="card" id="preview-card" role="button" tabindex="-1" aria-label="Edit your postcard message">
+            <div class="card-bg" id="card-bg"></div>
+            <div
+              class="message-input"
+              id="message-input"
+              data-placeholder="add your message"
+              data-empty="true"
+              aria-hidden="true"
+            ></div>
+          </div>
+          
+          <button type="button" class="photo-slot photo-slot--one" id="photo-slot-1" data-frame="plain" aria-label="View photo 1" disabled>
+            <img alt="" />
+          </button>
+          <button type="button" class="photo-slot photo-slot--two" id="photo-slot-2" data-frame="plain" aria-label="View photo 2" disabled>
+            <img alt="" />
+          </button>
+
+          <span class="envelope-stamp">hi-hello</span>
+
+          <svg class="layer envelope-front" viewBox="0 0 500 525" preserveAspectRatio="none">
+            <path d="M0 225L88.581 267.076C95.556 270.389 100 277.3 100 285.021C100 337.57 100 525 100 525H0V225Z" fill="#FFFAFA" fill-opacity="0.5"/>
+            <path d="M500 225L411.419 267.076C404.444 270.389 400 277.3 400 285.021C400 337.57 400 525 400 525H500V225Z" fill="#FFFAFA" fill-opacity="0.5"/>
+            <path d="M37.035 319.454C38.751 309.929 47.041 303 56.718 303H443.282C452.959 303 461.249 309.929 462.965 319.454L500 525H0L37.035 319.454Z" fill="#FFFAFA" fill-opacity="0.5"/>
+          </svg>
+        </div>
+
+        <form class="send-form" id="send-form" novalidate>
+          <div class="field-row">
+            <label for="sender">sender</label>
+            <input type="email" id="sender" name="sender" placeholder="enter your email" required />
+          </div>
+
+          <div class="send-row">
+            <button type="submit" class="cta-button is-filled send-button">
+              <span>seal it</span>
+              <span class="material-icons">send</span>
+            </button>
+            <p class="send-note" id="send-note" role="status"></p>
+          </div>
+        </form>
+      </div>
+
+      <!-- RIGHT: postcard picker + own-photo picker -->
+      <div class="compose-right">
+        <section class="picker-section">
+          <h2 class="picker-title">postcard</h2>
+          <div class="picker-row" data-postcard-gallery role="radiogroup" aria-label="Postcard designs">
+            <button type="button" class="postcard-card" role="radio" aria-checked="false" tabindex="0"
+              data-postcard-id="fold-lines" data-postcard-label="Folded Note"
+              style="background-image:url('assets/postcards/folded_note.png')">
+              <span class="postcard-card-check" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 8.5L6.2 11.5L13 4.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="visually-hidden">Folded Note</span>
+            </button>
+
+            <button type="button" class="postcard-card" role="radio" aria-checked="false" tabindex="-1"
+              data-postcard-id="loop-doodle" data-postcard-label="Loop Doodle"
+              style="background-image:url('assets/postcards/white_loop.png')">
+              <span class="postcard-card-check" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 8.5L6.2 11.5L13 4.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="visually-hidden">Loop Doodle</span>
+            </button>
+
+            <button type="button" class="postcard-card" role="radio" aria-checked="false" tabindex="-1"
+              data-postcard-id="watercolor" data-postcard-label="Sage Watercolor"
+              style="background-image:url('assets/postcards/sage_watercolor.png')">
+              <span class="postcard-card-check" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 8.5L6.2 11.5L13 4.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="visually-hidden">Sage Watercolor</span>
+            </button>
+
+            <button type="button" class="postcard-card" role="radio" aria-checked="false" tabindex="-1"
+              data-postcard-id="dotted-edge" data-postcard-label="Dotted Edge"
+              style="background-image:url('assets/postcards/dotted_edge.png')">
+              <span class="postcard-card-check" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 8.5L6.2 11.5L13 4.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="visually-hidden">Dotted Edge</span>
+            </button>
+
+            <button type="button" class="postcard-card" role="radio" aria-checked="false" tabindex="-1"
+              data-postcard-id="dusk-gradient" data-postcard-label="Dusk Gradient"
+              style="background-image:url('assets/postcards/dusk_gradient.png')">
+              <span class="postcard-card-check" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 8.5L6.2 11.5L13 4.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="visually-hidden">Dusk Gradient</span>
+            </button>
+
+            <button type="button" class="postcard-card" role="radio" aria-checked="false" tabindex="-1"
+              data-postcard-id="brown" data-postcard-label="Brown Loop" data-text-theme="light"
+              style="background-image:url('assets/postcards/brown_loop.png')">
+              <span class="postcard-card-check" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 8.5L6.2 11.5L13 4.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="visually-hidden">Brown Loop</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="picker-section">
+          <h2 class="picker-title">add your own image</h2>
+          <div class="picker-row" data-frame-gallery>
+            <button type="button" class="frame-slot" data-frame="plain" aria-label="Add a photo, plain style">
+              <span class="frame-inner"></span>
+              <span class="plus" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 3V13M3 8H13" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </button>
+
+            <button type="button" class="frame-slot" data-frame="polaroid-white" aria-label="Add a photo, white polaroid style">
+              <span class="frame-inner"></span>
+              <span class="plus" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 3V13M3 8H13" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </button>
+
+            <button type="button" class="frame-slot" data-frame="polaroid-black" aria-label="Add a photo, black polaroid style">
+              <span class="frame-inner"></span>
+              <span class="plus" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 3V13M3 8H13" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </button>
+
+            <button type="button" class="frame-slot" data-frame="gallery-black" aria-label="Add a photo, black gallery frame style">
+              <span class="frame-inner"></span>
+              <span class="plus" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 3V13M3 8H13" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </button>
+
+            <button type="button" class="frame-slot" data-frame="gallery-white" aria-label="Add a photo, white gallery frame style">
+              <span class="frame-inner"></span>
+              <span class="plus" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 3V13M3 8H13" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+          <p class="picker-hint" id="picker-hint">• you can only add maximum of 2 pictures</p>
+          <input type="file" id="photo-input" accept="image/*" class="visually-hidden" />
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="postcard-modal-backdrop" id="modal-backdrop" hidden>
+    <div
+      class="postcard-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-heading"
+    >
+      <h2 class="visually-hidden" id="modal-heading">Write your postcard message</h2>
+
+      <div class="postcard-modal-card">
+        <div class="postcard-modal-bg" id="modal-card-bg"></div>
+        <div id="modal-message-wrap" class="postcard-modal-message-wrap">
+          <div
+            class="postcard-modal-message"
+            id="modal-message"
+            contenteditable="true"
+            data-placeholder="add your message"
+            data-empty="true"
+            role="textbox"
+            aria-multiline="true"
+            aria-label="Your message"
+          ></div>
+        </div>
+      </div>
+
+      <div class="postcard-modal-actions">
+        <button type="button" class="cta-button modal-done-btn" id="modal-done">
+          <span>done</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="photo-viewer-backdrop" id="photo-viewer-backdrop" hidden>
+    <div
+      class="photo-viewer"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="photo-viewer-heading"
+    >
+      <h2 class="visually-hidden" id="photo-viewer-heading">View photo</h2>
+
+      <div class="photo-viewer-frame">
+        <img id="photo-viewer-image" alt="Your uploaded photo" />
+      </div>
+
+      <div class="photo-viewer-actions" id="photo-viewer-actions">
+        <button type="button" class="back-button" id="photo-viewer-back">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M16 10H4M4 10L9 5M4 10L9 15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Back</span>
+        </button>
+        <button type="button" class="warning-button" id="photo-viewer-remove">
+          <span>Remove</span>
+        </button>
+      </div>
+
+      <div class="photo-viewer-confirm" id="photo-viewer-confirm" hidden>
+        <p>Remove this photo?</p>
+        <div class="photo-viewer-confirm-actions">
+          <button type="button" class="back-button" id="photo-viewer-cancel">
+            <span>Cancel</span>
+          </button>
+          <button type="button" class="warning-button is-solid" id="photo-viewer-confirm-remove">
+            <span>Remove it</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/modules/compose.js"></script>
+</body>
+</html>

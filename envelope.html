@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hi-hello — you have mail</title>
+  <meta name="description" content="Someone made this just for you." />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/sent.css" />
+  <link rel="stylesheet" href="css/select.css" />
+  <link rel="stylesheet" href="css/envelope.css" />
+</head>
+<body>
+  <div class="paper-bg" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="logo" href="index.html" aria-label="hi-hello, back to home">hi-hello</a>
+  </header>
+
+  <main>
+    <section class="mail-layout" aria-live="polite">
+
+      <!-- State: checking the link -->
+      <div class="mail-state" id="state-loading">
+        <p class="mail-eyebrow">💌</p>
+        <h1 class="mail-heading">checking your envelope&hellip;</h1>
+      </div>
+
+      <!-- State: link doesn't resolve to anything -->
+      <div class="mail-state" id="state-not-found" hidden>
+        <p class="mail-eyebrow">💌</p>
+        <h1 class="mail-heading">we couldn't find this envelope</h1>
+        <p class="mail-subtext">double-check the link — it may have been mistyped.</p>
+      </div>
+
+      <!-- State: found, but not due yet -->
+      <div class="mail-state" id="state-sealed" hidden>
+        <div class="sent-envelope" aria-hidden="true">
+          <svg class="layer sent-envelope-back" viewBox="0 0 500 300" preserveAspectRatio="none">
+            <path d="M0 0L88.581 42.076C95.556 45.389 100 52.3 100 60.021C100 112.57 100 300 100 300H0V0Z" fill="#FFFAFA" fill-opacity="0.5"/>
+            <path d="M500 0L411.419 42.076C404.444 45.389 400 52.3 400 60.021C400 112.57 400 300 400 300H500V0Z" fill="#FFFAFA" fill-opacity="0.5"/>
+            <path d="M37.035 94.454C38.751 84.929 47.041 78 56.718 78H443.282C452.959 78 461.249 84.929 462.965 94.454L500 300H0L37.035 94.454Z" fill="#FFFAFA" fill-opacity="0.5"/>
+          </svg>
+          <span class="sent-envelope-stamp">hi<br />hello</span>
+          <svg class="layer sent-envelope-flap" viewBox="0 0 500 300" preserveAspectRatio="none">
+            <path d="M250 228C303.116 228 500 0 500 0H0C0 0 196.884 228 250 228Z" fill="#FFFAFA" fill-opacity="0.8"/>
+          </svg>
+        </div>
+        <h1 class="mail-heading">you have mail</h1>
+        <p class="mail-subtext" id="sealed-subtext">it's still finding its way to you.</p>
+      </div>
+
+      <!-- State: due, not opened yet -->
+      <div class="mail-state" id="state-ready" hidden>
+        <div class="sent-envelope" aria-hidden="true">
+          <svg class="layer sent-envelope-back" viewBox="0 0 500 300" preserveAspectRatio="none">
+            <path d="M0 0L88.581 42.076C95.556 45.389 100 52.3 100 60.021C100 112.57 100 300 100 300H0V0Z" fill="#FFFAFA" fill-opacity="0.5"/>
+            <path d="M500 0L411.419 42.076C404.444 45.389 400 52.3 400 60.021C400 112.57 400 300 400 300H500V0Z" fill="#FFFAFA" fill-opacity="0.5"/>
+            <path d="M37.035 94.454C38.751 84.929 47.041 78 56.718 78H443.282C452.959 78 461.249 84.929 462.965 94.454L500 300H0L37.035 94.454Z" fill="#FFFAFA" fill-opacity="0.5"/>
+          </svg>
+          <span class="sent-envelope-stamp">hi<br />hello</span>
+          <svg class="layer sent-envelope-flap" viewBox="0 0 500 300" preserveAspectRatio="none">
+            <path d="M250 228C303.116 228 500 0 500 0H0C0 0 196.884 228 250 228Z" fill="#FFFAFA" fill-opacity="0.8"/>
+          </svg>
+        </div>
+        <h1 class="mail-heading">you have mail</h1>
+        <p class="mail-subtext">someone made this just for you.</p>
+        <button type="button" class="cta-button is-filled open-button" id="open-button">
+          <span>Open</span>
+        </button>
+      </div>
+
+      <!-- State: opened — the actual postcard -->
+      <div class="mail-state mail-state--opened" id="state-opened" hidden>
+        <div class="envelope-scene" id="reveal-scene">
+          <svg class="layer envelope-back" viewBox="0 0 500 525" preserveAspectRatio="none">
+            <path d="M0 225H500V525H0Z" fill="#FFFAFA" fill-opacity="0.3"/>
+            <path d="M250 0C303.116 0 500 228 500 228H0C0 228 196.884 0 250 0Z" fill="#FFFAFA" fill-opacity="0.3"/>
+          </svg>
+
+          <div class="card" id="reveal-card">
+            <div class="card-bg" id="reveal-card-bg"></div>
+            <div class="message-input" id="reveal-message"></div>
+          </div>
+
+          <div class="reveal-photos" id="reveal-photos"></div>
+
+          <span class="envelope-stamp">hi-hello</span>
+
+          <svg class="layer envelope-front" viewBox="0 0 500 525" preserveAspectRatio="none">
+            <path d="M0 225L88.581 267.076C95.556 270.389 100 277.3 100 285.021C100 337.57 100 525 100 525H0V225Z" fill="#FFFAFA" fill-opacity="0.5"/>
+            <path d="M500 225L411.419 267.076C404.444 270.389 400 277.3 400 285.021C400 337.57 400 525 400 525H500V225Z" fill="#FFFAFA" fill-opacity="0.5"/>
+            <path d="M37.035 319.454C38.751 309.929 47.041 303 56.718 303H443.282C452.959 303 461.249 309.929 462.965 319.454L500 525H0L37.035 319.454Z" fill="#FFFAFA" fill-opacity="0.5"/>
+          </svg>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="js/modules/envelope.js"></script>
+</body>
+</html>

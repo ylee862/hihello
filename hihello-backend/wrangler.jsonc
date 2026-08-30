@@ -1,0 +1,29 @@
+{
+  "name": "hihello-backend",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "hihello-db",
+      "database_id": "1a9cad7c-1787-4c05-8cfc-8c3d9e8dd8f6"
+    }
+  ],
+
+  "vars": {
+    // Used to build the shareable link returned after creating a postcard,
+    // e.g. "https://hihello.pages.dev/e/8Kf92Lm".
+    "SITE_URL": "https://your-frontend-domain.pages.dev",
+    "SEND_DELAY_MS": "432000000",
+    "MESSAGE_MAX_LENGTH": "2000",
+    "MAX_PHOTOS_PER_POSTCARD": "2",
+    "MAX_PHOTO_BYTES": "500000",
+    "MAX_REQUEST_BYTES": "3145728"
+  }
+
+  // No secrets needed — there's no third-party service (email, storage)
+  // in this design anymore. Everything runs on Workers + D1 alone.
+}
+

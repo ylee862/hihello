@@ -1,0 +1,156 @@
+/* ==========================================================================
+   sent confirmation screen
+   ========================================================================== */
+
+.sent-layout {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: clamp(0.5rem, 2vh, 1.5rem) var(--page-pad) clamp(1.5rem, 4vh, 2.5rem);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.75rem, 4vh, 2.75rem);
+  text-align: center;
+}
+
+.sent-heading {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: normal;
+  font-size: clamp(1.4rem, min(4.6vw, 4.4vh), 2.3rem);
+  line-height: 1.35;
+  color: var(--color-white);
+  text-wrap: balance;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Closed envelope illustration
+   ========================================================================== */
+
+.sent-envelope {
+  position: relative;
+  width: min(80vw, clamp(14rem, 38vh, 26rem));
+  aspect-ratio: 500 / 300;
+  filter: drop-shadow(0 24px 40px rgba(30, 24, 15, 0.25));
+}
+
+.sent-envelope svg.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sent-envelope-back {
+  z-index: 1;
+}
+
+.sent-envelope-flap {
+  z-index: 2;
+}
+
+.sent-envelope-stamp {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 500;
+  font-size: clamp(0.85rem, 2.4vw, 1.15rem);
+  line-height: 1.2;
+  color: rgba(58, 53, 44, 0.55);
+  text-align: center;
+}
+
+.sent-layout .cta-button {
+  opacity: 1;
+  animation: none;
+  font-style: normal;
+}
+
+/* ==========================================================================
+   Share-link box
+   ========================================================================== */
+
+.share-link-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: min(100%, 26rem);
+}
+
+.share-link-hint {
+  font-family: var(--font-body);
+  font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+  color: rgba(255, 250, 250, 0.75);
+}
+
+.share-link-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.4rem 0.4rem 0.4rem 1rem;
+  background: rgba(255, 250, 250, 0.08);
+  border: 1.5px solid rgba(255, 250, 250, 0.35);
+  border-radius: 999px;
+}
+
+.share-link-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-body);
+  font-size: clamp(0.75rem, 1.6vw, 0.9rem);
+  color: var(--color-white);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.share-link-input:focus {
+  outline: none;
+}
+
+.copy-link-button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.75rem, 1.4vw, 0.9rem);
+  transition: transform 200ms var(--ease-soft), background 200ms var(--ease-soft);
+}
+
+.copy-link-button svg {
+  width: 1em;
+  height: 1em;
+}
+
+.copy-link-button:hover,
+.copy-link-button:focus-visible {
+  transform: translateY(-1px);
+  background: var(--color-gold-soft);
+}
+
+.copy-link-button:active {
+  transform: translateY(0);
+}
+
+.copy-link-button.is-copied {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}

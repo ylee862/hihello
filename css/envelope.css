@@ -1,0 +1,80 @@
+/* ==========================================================================
+   recipient's envelope-opening screen
+   ========================================================================== */
+
+.mail-layout {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: clamp(0.5rem, 2vh, 1.5rem) var(--page-pad) clamp(1.5rem, 4vh, 2.5rem);
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mail-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.25rem, 3vh, 2rem);
+  text-align: center;
+}
+
+.mail-eyebrow {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  margin: 0;
+}
+
+.mail-heading {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.4rem, min(4.6vw, 4.4vh), 2.3rem);
+  line-height: 1.35;
+  color: var(--color-white);
+  text-wrap: balance;
+  margin: 0;
+}
+
+.mail-subtext {
+  font-family: var(--font-body);
+  font-size: clamp(0.85rem, 1.8vw, 1rem);
+  color: rgba(255, 250, 250, 0.8);
+  max-width: 26rem;
+  margin: 0;
+}
+
+.open-button {
+  opacity: 1;
+  animation: none;
+  font-style: normal;
+}
+
+/* ==========================================================================
+   Opened reveal — sized/positioned the same as select.html's envelope-scene,
+   just without the interactive picker chrome around it.
+   ========================================================================== */
+
+.mail-state--opened {
+  width: 100%;
+}
+
+.mail-state--opened .envelope-scene {
+  margin-inline: auto;
+  opacity: 0;
+  animation: fade-in var(--dur-med) var(--ease-soft) forwards;
+}
+
+.mail-state--opened .card,
+.mail-state--opened .photo-slot {
+  opacity: 1 !important;
+  scale: 1 !important;
+}
+
+.reveal-photos {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
