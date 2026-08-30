@@ -234,16 +234,21 @@ function setUpPhotoUpload() {
     const nextSlot = slots.find((slot) => !slot.classList.contains('is-filled'));
     if (!nextSlot) return;
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const img = nextSlot.querySelector('img');
-      img.src = reader.result;
-      nextSlot.dataset.frame = pendingFrame;
-      nextSlot.classList.add('is-filled');
-      nextSlot.disabled = false; 
-      updateLimitState();
-    };
-    reader.readAsDataURL(file);
+    hint.textContent = '\u2022 resizing photo\u2026';
+
+    compressImage(file, { maxDimension: 1400, maxBytes: 400_000 })
+      .then((dataUrl) => {
+        const img = nextSlot.querySelector('img');
+        img.src = dataUrl;
+        nextSlot.dataset.frame = pendingFrame;
+        nextSlot.classList.add('is-filled');
+        nextSlot.disabled = false; 
+        updateLimitState();
+      })
+      .catch(() => {
+        hint.textContent = '\u2022 that photo couldn\u2019t be processed — try a different one';
+        hint.classList.add('is-limit');
+      });
   });
 
   function updateLimitState() {
@@ -257,6 +262,55 @@ function setUpPhotoUpload() {
   }
 
   return { slots, frameButtons, updateLimitState };
+}
+
+function compressImage(file, { maxDimension, maxBytes }) {
+  return new Promise((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(file);
+    const img = new Image();
+
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+
+      const scale = Math.min(1, maxDimension / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      const qualitySteps = [0.85, 0.7, 0.55, 0.4, 0.25];
+      let result = null;
+
+      for (const quality of qualitySteps) {
+        const candidate = canvas.toDataURL('image/jpeg', quality);
+        if (base64ByteLength(candidate) <= maxBytes) {
+          result = candidate;
+          break;
+        }
+        result = candidate; // keep the smallest attempt even if it never hits target
+      }
+
+      if (!result) {
+        reject(new Error('Could not compress image'));
+        return;
+      }
+      resolve(result);
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('Could not load image'));
+    };
+
+    img.src = objectUrl;
+  });
+}
+
+function base64ByteLength(dataUrl) {
+  const base64 = dataUrl.slice(dataUrl.indexOf(',') + 1);
+  return Math.floor((base64.length * 3) / 4);
 }
 
 function setUpPhotoViewer(photoUpload) {
