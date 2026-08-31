@@ -1,4 +1,0 @@
-# Rewrites (200 = keeps the URL in the address bar, unlike a 301/302
-# redirect) so /e/TOKEN serves envelope.html, whose JS reads the token
-# back out of the path. Cloudflare Pages reads this file automatically.
-/e/*  /envelope.html  200

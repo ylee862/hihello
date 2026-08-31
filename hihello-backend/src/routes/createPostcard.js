@@ -78,7 +78,7 @@ export async function handleCreatePostcard(request, env) {
   return json(201, {
     ok: true,
     token,
-    shareUrl: `${env.SITE_URL}/e/${token}`,
+    shareUrl: `${env.SITE_URL}/envelope.html?token=${token}`,
     arrivesFor: new Date(scheduledAt).toISOString(),
   });
 }

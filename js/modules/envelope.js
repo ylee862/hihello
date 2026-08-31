@@ -101,9 +101,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getTokenFromPath() {
+    const fromQuery = new URLSearchParams(window.location.search).get('token');
+    if (fromQuery) return fromQuery;
+
     const pathMatch = window.location.pathname.match(/\/e\/([^/]+)\/?$/);
-    if (pathMatch) return pathMatch[1];
-    return new URLSearchParams(window.location.search).get('token');
+    return pathMatch ? pathMatch[1] : null;
   }
 
   function daysUntil(isoString) {
