@@ -133,12 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /**
-   * Fix: "Save as PDF" — one PDF of the whole scene as displayed, plus
-   * one for the postcard/message alone, plus one per photo. Runs
-   * entirely client-side via html2canvas (DOM \u2192 image) + jsPDF
-   * (image \u2192 PDF page); nothing touches the backend.
-   */
   function setUpSavePdf(data) {
     const button = document.getElementById('save-pdf-button');
     const label = document.getElementById('save-pdf-label');

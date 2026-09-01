@@ -141,6 +141,10 @@
   animation: fade-in 220ms var(--ease-soft) forwards;
 }
 
+.reveal-lightbox-backdrop[hidden] {
+  display: none;
+}
+
 .reveal-lightbox {
   position: relative;
   max-width: min(90vw, 32rem);
