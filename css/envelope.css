@@ -12,6 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  scrollbar-gutter: stable;
 }
 
 .mail-state {
@@ -81,7 +82,13 @@
   position: absolute;
   inset: 0;
   z-index: 3;
+  pointer-events: none;
 }
+
+.reveal-photos .photo-slot {
+  pointer-events: auto;
+}
+
 
 
 /* ==========================================================================

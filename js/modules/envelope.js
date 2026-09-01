@@ -149,20 +149,12 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         label.textContent = 'Preparing PDFs\u2026';
 
-        const jobs = [
-          { el: document.getElementById('reveal-scene'), filename: 'hihello-envelope.pdf' },
-          { el: document.getElementById('reveal-card'), filename: 'hihello-postcard.pdf' },
-        ];
-        document.querySelectorAll('#reveal-photos .photo-slot').forEach((slot, i) => {
-          jobs.push({ el: slot, filename: `hihello-photo-${i + 1}.pdf` });
-        });
+        await saveDomAsPdf(document.getElementById('reveal-scene'), 'hihello-envelope.pdf', '#968f83');
+        await saveCardAsPdf('hihello-postcard.pdf');
 
-        // Fix: sequential, not Promise.all — firing several downloads at
-        // once in the same tick makes some browsers block all but the
-        // first as a suspected pop-up flood. One at a time, each fully
-        // finishing before the next starts, avoids that.
-        for (const job of jobs) {
-          await saveElementAsPdf(job.el, job.filename);
+        const photoImgs = Array.from(document.querySelectorAll('#reveal-photos .photo-slot img'));
+        for (let i = 0; i < photoImgs.length; i++) {
+          await savePhotoAsPdf(photoImgs[i].src, `hihello-photo-${i + 1}.pdf`);
         }
 
         label.textContent = 'Saved!';
@@ -170,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
           label.textContent = originalLabel;
         }, 1800);
       } catch (err) {
-        label.textContent = "Something went wrong \u2014 try again";
+        label.textContent = 'Something went wrong \u2014 try again';
         console.error('PDF export failed:', err);
       } finally {
         button.disabled = false;
@@ -178,12 +170,55 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  async function saveElementAsPdf(element, filename) {
-    const canvas = await html2canvas(element, {
-      backgroundColor: null,
-      scale: 2, // sharper output than the on-screen resolution
-      useCORS: true,
+  async function saveDomAsPdf(element, filename, backgroundColor = null) {
+    const canvas = await html2canvas(element, { backgroundColor, scale: 2, useCORS: true });
+    addCanvasToPdf(canvas, filename);
+  }
+
+  async function saveCardAsPdf(filename) {
+    const originalCard = document.getElementById('reveal-card');
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'reveal-lightbox-content';
+    wrapper.style.position = 'fixed';
+    wrapper.style.left = '-9999px';
+    wrapper.style.top = '0';
+
+    const clone = originalCard.cloneNode(true);
+    clone.removeAttribute('id'); // avoid a duplicate #reveal-card while both exist
+    wrapper.appendChild(clone);
+    document.body.appendChild(wrapper);
+
+    await new Promise((resolve) => requestAnimationFrame(resolve)); // let layout settle before capturing
+
+    const canvas = await html2canvas(clone, { backgroundColor: null, scale: 2, useCORS: true });
+    document.body.removeChild(wrapper);
+    addCanvasToPdf(canvas, filename);
+  }
+
+  async function savePhotoAsPdf(dataUrl, filename) {
+    const img = await loadImage(dataUrl);
+    const { jsPDF } = window.jspdf;
+    const format = dataUrl.startsWith('data:image/png') ? 'PNG' : 'JPEG';
+    const pdf = new jsPDF({
+      orientation: img.naturalWidth >= img.naturalHeight ? 'landscape' : 'portrait',
+      unit: 'px',
+      format: [img.naturalWidth, img.naturalHeight],
     });
+    pdf.addImage(dataUrl, format, 0, 0, img.naturalWidth, img.naturalHeight);
+    pdf.save(filename);
+  }
+
+  function loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
+
+  function addCanvasToPdf(canvas, filename) {
     const imgData = canvas.toDataURL('image/png');
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({
