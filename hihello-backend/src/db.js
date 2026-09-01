@@ -3,12 +3,11 @@
 export async function insertPostcard(env, postcard) {
   await env.DB.prepare(
     `INSERT INTO postcards
-       (token, sender_email, message, postcard_design_id, photos, created_at, scheduled_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`
+       (token, message, postcard_design_id, photos, created_at, scheduled_at)
+     VALUES (?, ?, ?, ?, ?, ?)`
   )
     .bind(
       postcard.token,
-      postcard.senderEmail,
       postcard.message,
       postcard.postcardDesignId,
       JSON.stringify(postcard.photos),

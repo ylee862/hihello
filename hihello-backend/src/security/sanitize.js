@@ -1,12 +1,5 @@
 // everything here runs server-side. Never trust the client's word that
 // an email is valid, a design id is real, or a data: URL is actually
-// a small, well-formed image — this file is what makes that not matter.
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-export function isValidEmail(value) {
-  return typeof value === 'string' && value.length <= 254 && EMAIL_RE.test(value);
-}
 
 /**
  * Trims, collapses excessive blank lines, and hard-caps length.

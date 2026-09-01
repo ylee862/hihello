@@ -149,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         label.textContent = 'Preparing PDFs\u2026';
 
-        await saveDomAsPdf(document.getElementById('reveal-scene'), 'hihello-envelope.pdf', '#968f83');
         await saveCardAsPdf('hihello-postcard.pdf');
 
         const photoImgs = Array.from(document.querySelectorAll('#reveal-photos .photo-slot img'));
@@ -177,21 +176,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function saveCardAsPdf(filename) {
     const originalCard = document.getElementById('reveal-card');
+    const originalBg = document.getElementById('reveal-card-bg');
+
+    const cardWidthPx = 900;
+    const cardHeightPx = Math.round((cardWidthPx * 76.19) / 60); // matches the card's real aspect ratio
 
     const wrapper = document.createElement('div');
     wrapper.className = 'reveal-lightbox-content';
     wrapper.style.position = 'fixed';
-    wrapper.style.left = '-9999px';
+    wrapper.style.left = '0';
     wrapper.style.top = '0';
+    wrapper.style.opacity = '0';
+    wrapper.style.pointerEvents = 'none';
+    wrapper.style.zIndex = '-1';
 
     const clone = originalCard.cloneNode(true);
-    clone.removeAttribute('id'); // avoid a duplicate #reveal-card while both exist
+    clone.removeAttribute('id');
+    clone.style.width = `${cardWidthPx}px`;
+    clone.style.height = `${cardHeightPx}px`;
+    clone.style.aspectRatio = 'auto'; 
+
+    const cloneBg = clone.querySelector('.card-bg');
+    if (cloneBg) cloneBg.removeAttribute('id');
+
     wrapper.appendChild(clone);
     document.body.appendChild(wrapper);
 
+    const bgImage = originalBg && originalBg.style.backgroundImage;
+    if (bgImage && bgImage !== 'none') {
+      const url = bgImage.slice(5, -2); 
+      await loadImage(url).catch(() => {});
+    }
+
     await new Promise((resolve) => requestAnimationFrame(resolve)); // let layout settle before capturing
 
-    const canvas = await html2canvas(clone, { backgroundColor: null, scale: 2, useCORS: true });
+    const canvas = await html2canvas(clone, {
+      backgroundColor: null,
+      scale: 3, 
+      useCORS: true,
+      logging: false,
+    });
     document.body.removeChild(wrapper);
     addCanvasToPdf(canvas, filename);
   }

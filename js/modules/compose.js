@@ -410,14 +410,12 @@ function setUpSendForm() {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const sender = form.sender.value.trim();
     const hasMessage = messageInput && messageInput.textContent.trim().length > 0;
     const hasPostcard = document.getElementById('preview-card').classList.contains('is-active');
 
     const problems = [];
     if (!hasPostcard) problems.push('pick a postcard');
     if (!hasMessage) problems.push('write a short message');
-    if (!sender || !form.sender.checkValidity()) problems.push('add your email');
 
     if (problems.length > 0) {
       note.textContent = `Just need you to ${problems.join(', ')}.`;
@@ -429,7 +427,7 @@ function setUpSendForm() {
     setSubmitting(true);
 
     try {
-      const payload = buildSubmissionPayload({ sender, messageInput });
+      const payload = buildSubmissionPayload({ messageInput });
       const response = await fetch(`${API_BASE_URL}/api/postcards`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -461,7 +459,7 @@ function setUpSendForm() {
   }
 }
 
-function buildSubmissionPayload({ sender, messageInput }) {
+function buildSubmissionPayload({ messageInput }) {
   const checkedPostcard = document.querySelector('[data-postcard-gallery] [aria-checked="true"]');
   const photos = [document.getElementById('photo-slot-1'), document.getElementById('photo-slot-2')]
     .filter((slot) => slot && slot.classList.contains('is-filled'))
@@ -469,7 +467,6 @@ function buildSubmissionPayload({ sender, messageInput }) {
     .filter((photo) => photo.data.startsWith('data:'));
 
   return {
-    senderEmail: sender,
     message: messageInput.textContent.trim(),
     postcardDesignId: checkedPostcard?.dataset.postcardId ?? null,
     photos,

@@ -4,7 +4,6 @@ import { readJsonBody } from '../utils/readJsonBody.js';
 import { generateToken } from '../utils/token.js';
 import { insertPostcard } from '../db.js';
 import {
-  isValidEmail,
   normalizeText,
   isKnownPostcardDesignId,
   isKnownPhotoFrame,
@@ -25,13 +24,11 @@ export async function handleCreatePostcard(request, env) {
     return json(err.statusCode ?? 400, { error: err.message });
   }
 
-  const senderEmail = typeof body.senderEmail === 'string' ? body.senderEmail.trim() : '';
   const message = normalizeText(body.message, messageMaxLength);
   const postcardDesignId = body.postcardDesignId ?? null;
   const photoEntries = Array.isArray(body.photos) ? body.photos.slice(0, maxPhotosPerPostcard) : [];
 
   const problems = [];
-  if (!isValidEmail(senderEmail)) problems.push('senderEmail is missing or invalid');
   if (!message) problems.push('message is required');
 
   const hasDesign = postcardDesignId !== null;
@@ -67,7 +64,6 @@ export async function handleCreatePostcard(request, env) {
 
   await insertPostcard(env, {
     token,
-    senderEmail,
     message,
     postcardDesignId,
     photos: validPhotos,

@@ -192,6 +192,7 @@
   position: absolute;
   top: -2.75rem;
   right: 0;
+  z-index: 5;
   width: 2.25rem;
   height: 2.25rem;
   display: flex;
