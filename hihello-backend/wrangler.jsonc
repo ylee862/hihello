@@ -14,12 +14,26 @@
 
   "vars": {
     "SITE_URL": "https://hihello.hi862.workers.dev",
-    "SEND_DELAY_MS": "432000000",
+    // "SEND_DELAY_MS": "432000000",
+    "SEND_DELAY_MS": "0",
     "MESSAGE_MAX_LENGTH": "2000",
     "MAX_PHOTOS_PER_POSTCARD": "2",
     "MAX_PHOTO_BYTES": "500000",
     "MAX_REQUEST_BYTES": "3145728"
-  }
+  },
+
+  "ratelimits": [
+    {
+      "name": "CREATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 5, "period": 60 } // 5 postcard creations per IP per minute
+    },
+    {
+      "name": "READ_LIMITER",
+      "namespace_id": "1002",
+      "simple": { "limit": 30, "period": 60 } // 30 link-checks per IP per minute — generous, just a backstop
+    }
+  ]
 
   // No secrets needed — there's no third-party service (email, storage)
   // in this design anymore. Everything runs on Workers + D1 alone.

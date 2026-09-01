@@ -99,11 +99,37 @@
             <path d="M37.035 319.454C38.751 309.929 47.041 303 56.718 303H443.282C452.959 303 461.249 309.929 462.965 319.454L500 525H0L37.035 319.454Z" fill="#FFFAFA" fill-opacity="0.5"/>
           </svg>
         </div>
+
+        <div class="opened-actions" id="opened-actions">
+          <button type="button" class="cta-button is-filled" id="save-pdf-button">
+            <span id="save-pdf-label">Save as PDF</span>
+          </button>
+          <a class="cta-button" href="select.html">
+            <span>Send an envelope</span>
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
       </div>
 
     </section>
   </main>
 
+  <!-- Click-to-enlarge lightbox: shared by both the postcard card and any photo -->
+  <div class="reveal-lightbox-backdrop" id="reveal-lightbox-backdrop" hidden>
+    <div class="reveal-lightbox" role="dialog" aria-modal="true" aria-label="Enlarged view">
+      <button type="button" class="reveal-lightbox-close" id="reveal-lightbox-close" aria-label="Close">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="reveal-lightbox-content" id="reveal-lightbox-content"></div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="js/modules/envelope.js"></script>
 </body>
 </html>

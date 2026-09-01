@@ -92,6 +92,113 @@ document.addEventListener('DOMContentLoaded', () => {
       slot.appendChild(img);
       photosEl.appendChild(slot);
     });
+
+    setUpClickToEnlarge();
+    setUpSavePdf(data);
+
+  }
+
+  function setUpClickToEnlarge() {
+    const backdrop = document.getElementById('reveal-lightbox-backdrop');
+    const content = document.getElementById('reveal-lightbox-content');
+    const closeBtn = document.getElementById('reveal-lightbox-close');
+
+    const openWith = (sourceEl) => {
+      content.innerHTML = '';
+      content.appendChild(sourceEl.cloneNode(true));
+      backdrop.hidden = false;
+    };
+    const close = () => {
+      backdrop.hidden = true;
+      content.innerHTML = '';
+    };
+
+    document.getElementById('reveal-card').addEventListener('click', () => {
+      openWith(document.getElementById('reveal-card'));
+    });
+    document.querySelectorAll('#reveal-photos .photo-slot').forEach((slot) => {
+      slot.addEventListener('click', () => {
+        const img = document.createElement('img');
+        img.src = slot.querySelector('img').src;
+        img.alt = '';
+        content.innerHTML = '';
+        content.appendChild(img);
+        backdrop.hidden = false;
+      });
+    });
+
+    closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) close();
+    });
+  }
+
+  /**
+   * Fix: "Save as PDF" — one PDF of the whole scene as displayed, plus
+   * one for the postcard/message alone, plus one per photo. Runs
+   * entirely client-side via html2canvas (DOM \u2192 image) + jsPDF
+   * (image \u2192 PDF page); nothing touches the backend.
+   */
+  function setUpSavePdf(data) {
+    const button = document.getElementById('save-pdf-button');
+    const label = document.getElementById('save-pdf-label');
+
+    button.onclick = async () => {
+      if (typeof html2canvas === 'undefined' || !window.jspdf) {
+        label.textContent = "Couldn't load PDF tools \u2014 check your connection";
+        return;
+      }
+
+      button.disabled = true;
+      const originalLabel = label.textContent;
+
+      try {
+        label.textContent = 'Preparing PDFs\u2026';
+
+        const jobs = [
+          { el: document.getElementById('reveal-scene'), filename: 'hihello-envelope.pdf' },
+          { el: document.getElementById('reveal-card'), filename: 'hihello-postcard.pdf' },
+        ];
+        document.querySelectorAll('#reveal-photos .photo-slot').forEach((slot, i) => {
+          jobs.push({ el: slot, filename: `hihello-photo-${i + 1}.pdf` });
+        });
+
+        // Fix: sequential, not Promise.all — firing several downloads at
+        // once in the same tick makes some browsers block all but the
+        // first as a suspected pop-up flood. One at a time, each fully
+        // finishing before the next starts, avoids that.
+        for (const job of jobs) {
+          await saveElementAsPdf(job.el, job.filename);
+        }
+
+        label.textContent = 'Saved!';
+        window.setTimeout(() => {
+          label.textContent = originalLabel;
+        }, 1800);
+      } catch (err) {
+        label.textContent = "Something went wrong \u2014 try again";
+        console.error('PDF export failed:', err);
+      } finally {
+        button.disabled = false;
+      }
+    };
+  }
+
+  async function saveElementAsPdf(element, filename) {
+    const canvas = await html2canvas(element, {
+      backgroundColor: null,
+      scale: 2, // sharper output than the on-screen resolution
+      useCORS: true,
+    });
+    const imgData = canvas.toDataURL('image/png');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+      orientation: canvas.width >= canvas.height ? 'landscape' : 'portrait',
+      unit: 'px',
+      format: [canvas.width, canvas.height],
+    });
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    pdf.save(filename);
   }
 
   function showState(name) {
