@@ -167,7 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
   }
-
   async function saveDomAsPdf(element, filename, backgroundColor = null) {
     const canvas = await html2canvas(element, { backgroundColor, scale: 2, useCORS: true });
     addCanvasToPdf(canvas, filename);
@@ -178,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const originalBg = document.getElementById('reveal-card-bg');
 
     const cardWidthPx = 900;
-    const cardHeightPx = Math.round((cardWidthPx * 76.19) / 60); // matches the card's real aspect ratio
+    const cardHeightPx = Math.round((cardWidthPx * 76.19) / 60);
 
     const wrapper = document.createElement('div');
     wrapper.className = 'reveal-lightbox-content';
@@ -192,7 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
     clone.removeAttribute('id');
     clone.style.width = `${cardWidthPx}px`;
     clone.style.height = `${cardHeightPx}px`;
-    clone.style.aspectRatio = 'auto'; 
+    clone.style.aspectRatio = 'auto';
+    clone.style.opacity = '1';
+    clone.style.animation = 'none';
 
     const cloneBg = clone.querySelector('.card-bg');
     if (cloneBg) cloneBg.removeAttribute('id');
@@ -202,14 +203,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const bgImage = originalBg && originalBg.style.backgroundImage;
     if (bgImage && bgImage !== 'none') {
-      const url = bgImage.slice(5, -2); 
-      await loadImage(url).catch(() => {}); 
+      const url = bgImage.slice(5, -2);
+      await loadImage(url).catch(() => {});
     }
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
     const canvas = await html2canvas(clone, {
       backgroundColor: null,
-      scale: 3, 
+      scale: 3,
       useCORS: true,
       logging: false,
     });

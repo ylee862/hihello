@@ -72,12 +72,6 @@
   animation: fade-in var(--dur-med) var(--ease-soft) forwards;
 }
 
-.mail-state--opened .card,
-.mail-state--opened .photo-slot {
-  opacity: 1 !important;
-  scale: 1 !important;
-}
-
 .reveal-photos {
   position: absolute;
   inset: 0;
