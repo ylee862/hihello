@@ -1,11 +1,11 @@
 /**
- * reads the token out of
+ * hi-hello — envelope.js
+ * Drives envelope.html — the recipient's link. Reads the token out of
  * the URL, asks the backend whether it's sealed or ready, and renders
  * the matching state. The backend itself withholds the message/photos
  * until the postcard is due, so there's nothing to "hide" here client-
  * side — we're just displaying whatever it gave us.
  */
-
 
 const API_BASE_URL = 'https://hihello-backend.hi862.workers.dev';
 
@@ -95,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setUpClickToEnlarge();
     setUpSavePdf(data);
-
   }
 
   function setUpClickToEnlarge() {
@@ -186,9 +185,8 @@ document.addEventListener('DOMContentLoaded', () => {
     wrapper.style.position = 'fixed';
     wrapper.style.left = '0';
     wrapper.style.top = '0';
-    wrapper.style.opacity = '0';
+    wrapper.style.zIndex = '-9999';
     wrapper.style.pointerEvents = 'none';
-    wrapper.style.zIndex = '-1';
 
     const clone = originalCard.cloneNode(true);
     clone.removeAttribute('id');
@@ -205,10 +203,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const bgImage = originalBg && originalBg.style.backgroundImage;
     if (bgImage && bgImage !== 'none') {
       const url = bgImage.slice(5, -2); 
-      await loadImage(url).catch(() => {});
+      await loadImage(url).catch(() => {}); 
     }
-
-    await new Promise((resolve) => requestAnimationFrame(resolve)); // let layout settle before capturing
+    await new Promise((resolve) => requestAnimationFrame(resolve));
 
     const canvas = await html2canvas(clone, {
       backgroundColor: null,

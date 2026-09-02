@@ -89,8 +89,6 @@
   pointer-events: auto;
 }
 
-
-
 /* ==========================================================================
    Opened-state actions: Save as PDF / Send an envelope
    ========================================================================== */
@@ -181,6 +179,7 @@
   aspect-ratio: 60 / 76.19;
   transform: none;
   cursor: default;
+  margin-right: 2.5rem;
   box-shadow: 0 24px 50px rgba(0, 0, 0, 0.4);
 }
 
