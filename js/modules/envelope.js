@@ -152,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const photoImgs = Array.from(document.querySelectorAll('#reveal-photos .photo-slot img'));
         for (let i = 0; i < photoImgs.length; i++) {
+          await pause(600); 
           await savePhotoAsPdf(photoImgs[i].src, `hihello-photo-${i + 1}.pdf`);
         }
 
@@ -191,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clone.removeAttribute('id');
     clone.style.width = `${cardWidthPx}px`;
     clone.style.height = `${cardHeightPx}px`;
-    clone.style.aspectRatio = 'auto';
+    clone.style.aspectRatio = 'auto'; 
     clone.style.opacity = '1';
     clone.style.animation = 'none';
 
@@ -203,16 +204,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const bgImage = originalBg && originalBg.style.backgroundImage;
     if (bgImage && bgImage !== 'none') {
-      const url = bgImage.slice(5, -2);
-      await loadImage(url).catch(() => {});
+      const url = bgImage.slice(5, -2); 
+      await loadImage(url).catch(() => {}); 
     }
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
     const canvas = await html2canvas(clone, {
       backgroundColor: null,
-      scale: 3,
+      scale: 3, 
       useCORS: true,
       logging: false,
+      width: cardWidthPx,
+      height: cardHeightPx,
+      windowWidth: cardWidthPx,
+      windowHeight: cardHeightPx,
     });
     document.body.removeChild(wrapper);
     addCanvasToPdf(canvas, filename);
@@ -238,6 +243,10 @@ document.addEventListener('DOMContentLoaded', () => {
       img.onerror = reject;
       img.src = src;
     });
+  }
+
+  function pause(ms) {
+    return new Promise((resolve) => window.setTimeout(resolve, ms));
   }
 
   function addCanvasToPdf(canvas, filename) {

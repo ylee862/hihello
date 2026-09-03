@@ -123,6 +123,12 @@
   transform: scale(1.03);
 }
 
+.mail-state--opened .photo-slot.is-filled {
+  opacity: 0;
+  animation: fade-in var(--dur-med) var(--ease-soft) forwards;
+  animation-delay: 820ms;
+}
+
 /* ==========================================================================
    Lightbox
    ========================================================================== */
