@@ -168,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
   }
+
   async function saveDomAsPdf(element, filename, backgroundColor = null) {
     const canvas = await html2canvas(element, { backgroundColor, scale: 2, useCORS: true });
     addCanvasToPdf(canvas, filename);
@@ -177,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const originalCard = document.getElementById('reveal-card');
     const originalBg = document.getElementById('reveal-card-bg');
 
-    const cardWidthPx = 900;
+    const cardWidthPx = 360;
     const cardHeightPx = Math.round((cardWidthPx * 76.19) / 60);
 
     const wrapper = document.createElement('div');
@@ -202,8 +203,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const messageEl = clone.querySelector('.message-input');
     if (messageEl) {
-      messageEl.style.fontSize = '46px';
+      messageEl.style.fontSize = '17px';
       messageEl.style.lineHeight = '1.5';
+      messageEl.style.color = '#3a352c';
     }
 
     const cloneBg = clone.querySelector('.card-bg');
@@ -221,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const canvas = await html2canvas(clone, {
       backgroundColor: null,
-      scale: 3,
+      scale: 6,
       useCORS: true,
       logging: false,
       width: cardWidthPx,
