@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const photoImgs = Array.from(document.querySelectorAll('#reveal-photos .photo-slot img'));
         for (let i = 0; i < photoImgs.length; i++) {
-          await pause(600); 
+          await pause(600);
           await savePhotoAsPdf(photoImgs[i].src, `hihello-photo-${i + 1}.pdf`);
         }
 
@@ -181,7 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const cardHeightPx = Math.round((cardWidthPx * 76.19) / 60);
 
     const wrapper = document.createElement('div');
-    wrapper.className = 'reveal-lightbox-content';
     wrapper.style.position = 'fixed';
     wrapper.style.left = '0';
     wrapper.style.top = '0';
@@ -190,11 +189,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const clone = originalCard.cloneNode(true);
     clone.removeAttribute('id');
-    clone.style.width = `${cardWidthPx}px`;
-    clone.style.height = `${cardHeightPx}px`;
-    clone.style.aspectRatio = 'auto'; 
-    clone.style.opacity = '1';
-    clone.style.animation = 'none';
+    Object.assign(clone.style, {
+      position: 'static',
+      width: `${cardWidthPx}px`,
+      height: `${cardHeightPx}px`,
+      aspectRatio: 'auto',
+      transform: 'none',
+      opacity: '1',
+      animation: 'none',
+      boxShadow: 'none',
+    });
+
+    const messageEl = clone.querySelector('.message-input');
+    if (messageEl) {
+      messageEl.style.fontSize = '46px';
+      messageEl.style.lineHeight = '1.5';
+    }
 
     const cloneBg = clone.querySelector('.card-bg');
     if (cloneBg) cloneBg.removeAttribute('id');
@@ -204,14 +214,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const bgImage = originalBg && originalBg.style.backgroundImage;
     if (bgImage && bgImage !== 'none') {
-      const url = bgImage.slice(5, -2); 
-      await loadImage(url).catch(() => {}); 
+      const url = bgImage.slice(5, -2);
+      await loadImage(url).catch(() => {});
     }
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
     const canvas = await html2canvas(clone, {
       backgroundColor: null,
-      scale: 3, 
+      scale: 3,
       useCORS: true,
       logging: false,
       width: cardWidthPx,
